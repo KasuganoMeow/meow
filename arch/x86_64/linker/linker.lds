@@ -1,0 +1,57 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+/* Copyright 2026 KasuganoMeow */
+/*
+This file is part of Meow.
+
+Meow is free software: you can redistribute it and/or modify it under the terms of
+the GNU Affero General Public License as published by the Free Software Foundation, 
+either version 3 of the License, or (at your option) any later version.
+
+Meow is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with 
+Meow. If not, see <https://www.gnu.org/licenses/>.
+*/
+
+OUTPUT_FORMAT(elf64-x86-64)
+
+ENTRY(start)
+
+SECTIONS
+{
+    . = 0x100000;
+
+    .text : ALIGN(4096)
+    {
+        *(.text)
+        *(.text.*)
+    }
+
+    .rodata : ALIGN(4096)
+    {
+        *(.rodata)
+        *(.rodata.*)
+    }
+
+    .data : ALIGN(4096)
+    {
+        *(.data)
+        *(.data.*)
+    }
+
+    .page_table : ALIGN(4096)
+    {
+        *(.page_table)
+    }
+
+    .bss : ALIGN(4096)
+    {
+        *(COMMON)
+        *(.bss)
+        *(.bss.*)
+    }
+
+    _kernel_end = .;
+}
