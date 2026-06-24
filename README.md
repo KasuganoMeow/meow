@@ -1,7 +1,7 @@
 # Porject Meow
 `meow` is a toy kernel written in `C` (and some `ASM`) that can run on `x86_64` and `i686` architectures.
 
-Porject update rating depending on how well I slept yestoday and what I aet for breakfast.
+The speed at which I update this project depends on how well I slept last night and what I ate for breakfast today.
 
 # TODO
 The following are the goals of Project Meow.
