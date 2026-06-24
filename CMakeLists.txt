@@ -21,7 +21,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(INTERNAL_COMPILE_FLAGS
     -Wall
     -Wextra
-    -std=gnu11
+    -std=gnu23
     -ffreestanding
 )
 

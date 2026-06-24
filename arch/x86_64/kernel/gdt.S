@@ -18,9 +18,9 @@ Meow. If not, see <https://www.gnu.org/licenses/>.
 .intel_syntax noprefix
 
 .section .text
-.global load_gdt
-load_gdt:
-    lgdt [gdt_pointer]
+.global gdt_load
+gdt_load:
+    lgdt [gdtr]
 
     mov ax, 0x10
     mov ds, ax

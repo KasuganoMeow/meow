@@ -17,27 +17,27 @@ Meow. If not, see <https://www.gnu.org/licenses/>.
 
 #include <meow/arch/gdt.h>
 
-extern void load_gdt(void);
+static gdt_entry_t gdt[3];
+gdtr_t             gdtr;
 
-segment_descriptor         gdt_entries[3];
-segment_descriptor_pointer gdt_pointer;
+extern void gdt_load(void);
 
-void set_gdt_entry(uint32_t index, uint8_t access, uint8_t flags) {
-	gdt_entries[index].base_1 = 0;
-	gdt_entries[index].base_2 = 0;
-	gdt_entries[index].base_3 = 0;
-	gdt_entries[index].limit_1 = 0;
-	gdt_entries[index].access = access;
-	gdt_entries[index].granularity = (flags & 0xF0);
+void gdt_set_descriptor(uint32_t index, uint8_t access, uint8_t flags) {
+	gdt[index].base_1 = 0;
+	gdt[index].base_2 = 0;
+	gdt[index].base_3 = 0;
+	gdt[index].limit_1 = 0;
+	gdt[index].access = access;
+	gdt[index].granularity = (flags & 0xF0);
 }
 
-void init_gdt(void) {
-	set_gdt_entry(0, 0, 0);
-	set_gdt_entry(1, 0x9A, 0x20);
-	set_gdt_entry(2, 0x92, 0x00);
+void gdt_init(void) {
+	gdt_set_descriptor(0, 0, 0);
+	gdt_set_descriptor(1, 0x9A, 0x20);
+	gdt_set_descriptor(2, 0x92, 0x00);
 
-	gdt_pointer.limit = sizeof(gdt_entries) - 1;
-	gdt_pointer.base = (uint64_t)&gdt_entries[0];
+	gdtr.limit = sizeof(gdt) - 1;
+	gdtr.base = (uint64_t)&gdt[0];
 
-	load_gdt();
+	gdt_load();
 }

@@ -16,6 +16,7 @@ Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <meow/arch/gdt.h>
+#include <meow/arch/idt.h>
 #include <meow/panic.h>
 #include <meow/tty.h>
 
@@ -26,9 +27,8 @@ void initKernel(uint32_t magic, uintptr_t info_addr) {
 	if (magic != 0x36d76289 || !info_addr) {
 		panic();
 	}
-	init_gdt();
+	gdt_init();
+	idt_init();
 	terminal_initialize();
-	terminal_setcolor(VGA_COLOR_LIGHT_GREY);
-	terminal_writestring("Hello, Kernel!");
-	panic();
+	asm volatile (".byte 0x0F, 0x0B");
 }

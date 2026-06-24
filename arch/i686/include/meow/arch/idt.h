@@ -15,26 +15,32 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef MEOW_ARCH_GDT_H
-#define MEOW_ARCH_GDT_H 1
+#ifndef MEOW_ARCH_IDT_H
+#define MEOW_ARCH_IDT_H 1
 
 #include <stdint.h>
 
 typedef struct [[gnu::packed]] {
-	uint16_t limit_1;
-	uint16_t base_1;
-	uint8_t  base_2;
-	uint8_t  access;
-	uint8_t  granularity;
-	uint8_t  base_3;
-} gdt_entry_t;
+    uint16_t isr_low;
+    uint16_t kernel_cs;
+    uint8_t  reserved;
+    uint8_t  attributes;
+    uint16_t isr_high;
+} idt_entry_t;
 
 typedef struct [[gnu::packed]] {
-	uint16_t limit;
-	uint32_t base;
-} gdtr_t;
+    uint16_t limit;
+    uint32_t base;
+} idtr_t;
 
-void gdt_set_descriptor(uint32_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
-void gdt_init(void);
+typedef struct {
+    uint32_t ds;
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    uint32_t int_no, err_code;
+    uint32_t eip, cs, eflags, useresp, ss;
+} registers_t;
+
+void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags);
+void idt_init(void);
 
 #endif

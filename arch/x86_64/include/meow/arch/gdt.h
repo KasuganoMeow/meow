@@ -15,8 +15,8 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef GDT_H
-#define GDT_H 1
+#ifndef MEOW_ARCH_GDT_H
+#define MEOW_ARCH_GDT_H 1
 
 #include <stdint.h>
 
@@ -27,13 +27,14 @@ typedef struct [[gnu::packed]] {
 	uint8_t  access;
 	uint8_t  granularity;
 	uint8_t  base_3;
-} segment_descriptor;
+} gdt_entry_t;
 
 typedef struct [[gnu::packed]] {
 	uint16_t limit;
 	uint64_t base;
-} segment_descriptor_pointer;
+} gdtr_t;
 
-void init_gdt(void);
+void gdt_set_descriptor(uint32_t index, uint8_t access, uint8_t flags);
+void gdt_init(void);
 
 #endif
