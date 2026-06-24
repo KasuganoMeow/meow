@@ -11,7 +11,7 @@ The following are the goals of Project Meow.
 - [x] Enable memory paging (identical mapping)
 - [x] Enter long mode (applicable to `x86_64`)
 - [x] The basic `stopcpu()` and `panic()` functions
-- [ ] `IDT` and Interrupt Handling
+- [x] `IDT` and Interrupt Handling
 - [ ] Memory repaging and mapping the kernel to the high half of memory
 - [ ] Physical Memory Manager
 - [ ] Virtual Memory Manager
