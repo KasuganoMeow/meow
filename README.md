@@ -4,7 +4,7 @@
 The speed at which I update this project depends on how well I slept last night and what I ate for breakfast today.
 
 # Note
-I recently changed my repository and GitHub account names to **lowercase**. I also refactored all assembly code that previously used `Intel GAS syntax`; it now uses `AT&T GAS syntax`.
+I refactored all assembly code that previously used `Intel GAS syntax`; it now uses `AT&T GAS syntax`.
 
 # Language
 Currently, only `C` and `ASM` are accepted; languages ​​such as `Rust` and `C++` are not being considered.
