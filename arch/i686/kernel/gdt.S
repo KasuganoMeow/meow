@@ -15,20 +15,20 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-.intel_syntax noprefix
-
 .section .text
 .global gdt_load
 gdt_load:
-    lgdt [gdtr]
+    lgdt gdtr
 
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
+    mov $0x10, %ax
+    mov %ax, %ds
+    mov %ax, %es
+    mov %ax, %fs
+    mov %ax, %gs
+    mov %ax, %ss
 
-    jmp 0x08:.L1
+    pushl $0x08
+    pushl $.L1
+    lret
 .L1:
     ret

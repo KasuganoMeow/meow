@@ -15,11 +15,16 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-.intel_syntax noprefix
 .code32
 
 #define ASM_FILE   1
 #include <meow/multiboot2.h>
+
+/* Although the GNU AS automatically resolves symbols at link time, 
+   it is good practice to list external symbols. */
+.extern pml4
+.extern boot_gdt_pointer
+.extern kernel_main
 
 .section .bss
 .align 16
@@ -30,6 +35,7 @@ stack_bottom:
 stack_top:
 
 .section .text
+
 .globl start, _start
 start:
 _start:
@@ -40,7 +46,8 @@ multiboot_header:
 	.long MULTIBOOT2_HEADER_MAGIC
 	.long MULTIBOOT_ARCHITECTURE_I386
 	.long multiboot_header_end - multiboot_header
-	.long -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT_ARCHITECTURE_I386 + (multiboot_header_end - multiboot_header))
+	.long -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT_ARCHITECTURE_I386 + \
+        (multiboot_header_end - multiboot_header))
 multiboot_header_end:
 	.short MULTIBOOT_HEADER_TAG_END
     .short 0
@@ -49,45 +56,50 @@ multiboot_header_end:
 multiboot_entry:
 	cli
 
-	mov edi, eax
-    mov esi, ebx
+    movl %eax, %edi
+    movl %ebx, %esi
 
-	lea esp, [stack_top]
+    leal stack_top, %esp
 
-    lea eax, [pml4]
-    mov cr3, eax
+    leal pml4, %eax
+    movl %eax, %cr3
 
-    mov eax, cr4
-    or eax, 1 << 5
-    mov cr4, eax
+    movl %cr4, %eax
+    orl $(1 << 5), %eax
+    movl %eax, %cr4
 
-    mov ecx, 0xC0000080
+    movl $0xC0000080, %ecx
     rdmsr
-    or eax, 1 << 8
+    orl $(1 << 8), %eax
     wrmsr
 
-    mov eax, cr0
-    or eax, 1 << 31
-    mov cr0, eax
+    movl %cr0, %eax
+    orl $(1 << 31), %eax
+    movl %eax, %cr0
 
-    lgdt [boot_gdt_pointer]
+    lgdt boot_gdt_pointer
 
-    push 0x08
-    push offset long_mode_entry
-    retf
+    pushl $0x08
+    pushl $long_mode_entry
+    lret
 
 .code64
+
 long_mode_entry:
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
+    movw $0x10, %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
+    movw %ax, %ss
 
-    lea rsp, [stack_top]
+    leaq stack_top(%rip), %rsp
 
-    call initKernel
-loop:
+    call kernel_main
+
+/* If the code reaches this point, it means I need to launch an ICBM at the
+   person responsible for all this. */
+    cli
+unreachable:
     hlt
-    jmp loop
+    jmp unreachable

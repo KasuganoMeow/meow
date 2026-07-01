@@ -15,10 +15,10 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-.intel_syntax noprefix
 .code32
 
 .section .page_table, "aw", @progbits
+
 .align 0x1000
 .global pml4
 pml4:
@@ -35,7 +35,7 @@ pdpt:
 .global pd
 pd:
     .set i, 0
-    .rept 512
+    .rept 8
     .quad (i << 21) | 0x83
     .set i, i+1
     .endr

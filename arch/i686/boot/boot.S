@@ -15,8 +15,6 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-.intel_syntax noprefix
-
 #define ASM_FILE   1
 #include <meow/multiboot2.h>
 
@@ -29,6 +27,7 @@ stack_bottom:
 stack_top:
 
 .section .text
+
 .global start, _start
 start:
 _start:
@@ -48,34 +47,41 @@ multiboot_header_end:
 multiboot_entry:
 	cli
 
-	lgdt [boot_gdt_pointer]
+	lgdt boot_gdt_pointer
 
-    jmp 0x08:reload_segments
+    movl $reload_segments, %ecx
+    pushl $0x08
+    pushl %ecx
+    lret
 reload_segments:
-    mov cx, 0x10
-    mov ds, cx
-    mov es, cx
-    mov fs, cx
-    mov gs, cx
-    mov ss, cx
+    movw $0x10, %cx
+    movw %cx, %ds
+    movw %cx, %es
+    movw %cx, %fs
+    movw %cx, %gs
+    movw %cx, %ss
 
-	lea esp, [stack_top]
+    leal stack_top, %esp
 
-    mov ecx, cr4
-    or ecx, 1 << 4
-    mov cr4, ecx
+    movl %cr4, %ecx
+    orl $(1 << 5), %ecx
+    movl %ecx, %cr4
 
-    mov ecx, offset page_dir
-    mov cr3, ecx
+    movl $pdpt, %ecx
+    movl %ecx, %cr3
 
-    mov ecx, cr0
-    or ecx, 1 << 31
-    mov cr0, ecx
+    movl %cr0, %ecx
+    orl $(1 << 31), %ecx
+    movl %ecx, %cr0
 
-	push ebx
-	push eax
+    pushl %ebx
+    pushl %eax
 
-	call initKernel
-loop:
-	hlt
-	jmp loop
+    call kernel_main
+
+/* If the code reaches this point, it means I need to launch an ICBM at the
+   person responsible for all this. */
+    cli
+unreachable:
+    hlt
+    jmp unreachable

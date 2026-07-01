@@ -18,6 +18,9 @@ project(Meow C ASM)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_ASM_COMPILER clang)
+
 set(INTERNAL_COMPILE_FLAGS
     -Wall
     -Wextra
@@ -26,8 +29,7 @@ set(INTERNAL_COMPILE_FLAGS
 )
 
 if(ARCH STREQUAL "x86_64")
-    set(CMAKE_C_COMPILER x86_64-linux-gnu-gcc)
-    set(CMAKE_ASM_COMPILER x86_64-linux-gnu-gcc)
+    set(CMAKE_C_COMPILER_TARGET x86_64-elf)
 	set(ARCH_COMPILE_FLAGS
 		-fno-stack-protector
 		-fno-stack-check
@@ -50,8 +52,7 @@ if(ARCH STREQUAL "x86_64")
         -m64
     )
 elseif(ARCH STREQUAL "i686")
-    set(CMAKE_C_COMPILER i686-linux-gnu-gcc)
-    set(CMAKE_ASM_COMPILER i686-linux-gnu-gcc)
+    set(CMAKE_C_COMPILER_TARGET i686-elf)
 	set(ARCH_COMPILE_FLAGS
 		-m32
         -march=i686

@@ -15,8 +15,6 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-.intel_syntax noprefix
-
 .global stopcpu
 stopcpu:
 	cli

@@ -15,9 +15,8 @@ You should have received a copy of the GNU Affero General Public License along w
 Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
-.intel_syntax noprefix
-
 .section .rodata
+
 .align 8
 boot_gdt_start:
 	.quad 0x0000000000000000
