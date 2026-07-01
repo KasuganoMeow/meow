@@ -20,7 +20,7 @@ Meow. If not, see <https://www.gnu.org/licenses/>.
 #define ASM_FILE   1
 #include <meow/multiboot2.h>
 
-/* Although the GNU AS automatically resolves symbols at link time, 
+/* Although the Clang automatically resolves symbols at link time, 
    it is good practice to list external symbols. */
 .extern pml4
 .extern boot_gdt_pointer

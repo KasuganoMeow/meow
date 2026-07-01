@@ -1,4 +1,4 @@
-# Porject Meow
+# Project Meow
 `meow` is a toy kernel written in `C` (and some `ASM`) that can run on `x86_64` and `i686` architectures.
 
 The speed at which I update this project depends on how well I slept last night and what I ate for breakfast today.
@@ -12,9 +12,9 @@ Currently, only `C` and `ASM` are accepted; languages ​​such as `Rust` and `
 (I once considered a C++ version of the `meow`; if anyone is interested, I could clean it up and upload it, though it won't be merged into the main branch)
 
 # Build
-`meow` is compiled using `cmake` and `clang`.
+`meow` is compiled using `cmake` and `clang` (`cmake` 3.10+, `clang` 17+).
 
-(Previously used `cmake` + `GCC`)
+(Previously used `cmake` + `GCC`. Of course, you can use `GCC` if you wish—the code works perfectly with it.)
 
 `i686` Version:
 ```
@@ -26,6 +26,8 @@ cmake .. -DARCH=i686 && make -j$(nproc)
 mkdir build && cd build
 cmake .. -DARCH=x86_64 && make -j$(nproc)
 ```
+
+Thanks to the use of `clang`, you can even perform cross-compilation directly on an Android phone.
 
 # TODO
 The following are the goals of Project Meow.

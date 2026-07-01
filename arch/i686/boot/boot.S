@@ -18,6 +18,12 @@ Meow. If not, see <https://www.gnu.org/licenses/>.
 #define ASM_FILE   1
 #include <meow/multiboot2.h>
 
+/* Although the Clang automatically resolves symbols at link time, 
+   it is good practice to list external symbols. */
+.extern pdpt
+.extern boot_gdt_pointer
+.extern kernel_main
+
 .section .bss
 .align 16
 .globl stack_bottom
@@ -53,6 +59,7 @@ multiboot_entry:
     pushl $0x08
     pushl %ecx
     lret
+
 reload_segments:
     movw $0x10, %cx
     movw %cx, %ds
@@ -67,7 +74,7 @@ reload_segments:
     orl $(1 << 5), %ecx
     movl %ecx, %cr4
 
-    movl $pdpt, %ecx
+    leal pdpt, %ecx
     movl %ecx, %cr3
 
     movl %cr0, %ecx

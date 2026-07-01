@@ -17,6 +17,8 @@ Meow. If not, see <https://www.gnu.org/licenses/>.
 
 .section .text
 
+/* Although the Clang automatically resolves symbols at link time, 
+   it is good practice to list external symbols. */
 .extern exception_handler
 
 .macro isr_err_stub num

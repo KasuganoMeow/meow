@@ -16,6 +16,11 @@ Meow. If not, see <https://www.gnu.org/licenses/>.
 */
 
 .section .text
+
+/* Although the Clang automatically resolves symbols at link time, 
+   it is good practice to list external symbols. */
+.extern gdtr
+
 .global gdt_load
 gdt_load:
     lgdt gdtr
